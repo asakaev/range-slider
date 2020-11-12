@@ -8,6 +8,14 @@ const rangeElem = document.getElementById('range')
  */
 const textElem = document.getElementById('text')
 
+const resultElem = document.getElementById('result')
+
+const nf = new Intl.NumberFormat();
+
+const calc = n => n * 1000
+
+const format = s => nf.format(s).replaceAll(',', "'")
+
 /**
  * Lower range value
  */
@@ -16,7 +24,7 @@ const Lower = 0
 /**
  * Upper range value
  */
-const Upper = 1000
+const Upper = 100
 
 
 /**
@@ -44,7 +52,12 @@ const clamp = n => {
  * Update textElem value to rangeElem value
  */
 const rangeHandler = _ => {
-  textElem.value = rangeElem.value
+  const n = rangeElem.value
+  const r = calc(n)
+  const f = format(r)
+
+  textElem.value = n
+  resultElem.textContent = f
 }
 
 /**
@@ -61,8 +74,12 @@ const textHandler = _ => {
   const v1 = isEmpty(s) ? Lower : s
   const v2 = isNumber(v1) ? clamp(v1) : v0
 
+  const r = calc(v2)
+  const f = format(r)
+
   textElem.value = v2
   rangeElem.value = v2
+  resultElem.textContent = f
 }
 
 
@@ -80,9 +97,9 @@ textElem.value = rangeElem.value
 /**
  * Subscribe to rangeElem events
  */
-rangeElem.addEventListener('input', rangeHandler, false)
+rangeElem.addEventListener('input', rangeHandler)
 
 /**
  * Subscribe to textElem events
  */
-textElem.addEventListener('input', textHandler, false)
+textElem.addEventListener('input', textHandler)
